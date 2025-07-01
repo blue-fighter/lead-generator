@@ -1,25 +1,27 @@
 # Lead generator for test task of Leads.Tech project
 
-## Install package
+## How to run
 
-Install with composer:
-
-```bash
-composer require vladimir163/lead-generator
-```
-
-or add to the require section in `composer.json`
+Once you downloaded project from repository, execute this from project's root path
 
 ```bash
-"vladimir163/lead-generator": "*"
+docker build -t lead_gen .
 ```
 
-## Using
+Then run the container with setting the name
 
-```php
-$generator = new Generator();
+```bash
+docker run --name leads -d lead_gen:latest
+```
 
-$generator->generateLeads(10000, function (Lead $lead) {
-    //TODO: send lead to handling
-});
+To execute handler:
+
+```bash
+docker exec -it leads php src/start.php
+```
+
+To copy file from container:
+
+```bash
+docker cp leads:/application/log.txt log.txt
 ```

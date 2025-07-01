@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LeadGenerator;
 
-use LeadGenerator\Lead;
+use LeadGenerator\Enums\CategoryEnum;
+
+use function Amp\Future\awaitAll;
 
 /**
  * Class Generator
@@ -16,12 +20,14 @@ class Generator
      */
     public function generateLeads(int $count, callable $leadHandler): void
     {
-        for($i = 1; $i <= $count; $i++) {
+        $awaitingFutures = [];
+        for ($i = 1; $i <= $count; $i++) {
             $lead = new Lead();
             $lead->id = $i;
             $lead->categoryName = $this->getRandCategory();
-            $leadHandler($lead);
+            $awaitingFutures[] = $leadHandler($lead);
         }
+        awaitAll($awaitingFutures);
     }
 
     /**
@@ -29,20 +35,6 @@ class Generator
      */
     private function getRandCategory(): string
     {
-        $categories = [
-            'Buy auto',
-            'Buy house',
-            'Get loan',
-            'Cleaning',
-            'Learning',
-            'Car wash',
-            'Repair smth',
-            'Barbershop',
-            'Pizza',
-            'Car insurance',
-            'Life insurance'
-        ];
-
-        return $categories[array_rand($categories)];
+        return CategoryEnum::cases()[array_rand(CategoryEnum::cases())]->value;
     }
 }
