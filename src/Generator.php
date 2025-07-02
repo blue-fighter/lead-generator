@@ -35,6 +35,6 @@ class Generator
      */
     private function getRandCategory(): string
     {
-        return CategoryEnum::cases()[array_rand(CategoryEnum::cases())]->value;
+        return CategoryEnum::values()[array_rand(CategoryEnum::values())];
     }
 }

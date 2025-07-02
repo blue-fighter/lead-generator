@@ -6,6 +6,8 @@ namespace LeadGenerator;
 
 use Amp\Future;
 
+use LeadGenerator\Enums\CategoryEnum;
+
 use function Amp\async;
 use function Amp\delay;
 
@@ -20,9 +22,16 @@ class Handler
     public function __invoke(Lead $lead): Future
     {
         return async(function () use ($lead) {
-            $this->handleLead($lead);
-            $this->writeLog($lead);
+            if ($this->isLeadValid($lead)) {
+                $this->handleLead($lead);
+                $this->writeLog($lead);
+            }
         });
+    }
+
+    private function isLeadValid(Lead $lead): bool
+    {
+        return in_array($lead->categoryName, CategoryEnum::values());
     }
 
     private function handleLead(Lead $lead): void

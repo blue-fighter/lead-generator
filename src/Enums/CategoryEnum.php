@@ -17,4 +17,9 @@ enum CategoryEnum: string
     case PIZZA = 'Pizza';
     case CAR_INSURANCE = 'Car insurance';
     case LIFE_INSURANCE = 'Life insurance';
+
+    public static function values(): array
+    {
+        return array_column(self::cases(), 'value');
+    }
 }
